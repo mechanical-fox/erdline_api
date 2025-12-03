@@ -1,0 +1,6 @@
+
+
+
+server:
+    ssl:
+        enabled: true # false = use http, true = use https (and the certificat)

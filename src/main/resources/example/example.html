@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" /> 
+        <title>API Documentation</title>
+        <link rel="stylesheet" href="example.css" />
+        <script src="example.js"> </script>
+    </head>
+    <body>  
+
+        <div class="margin5">
+            <div class="column_center">
+                <p class="title">API Supervision</p>
+                <p class="text1"><i>version: v1.4</i></p>
+            </div>
+        </div>
+
+        <div class="nav">
+            <a id="nav_item_1" class="nav_item_desactivated" href="#ancre1"> Résultats </a>
+            <a id="nav_item_2" class="nav_item_desactivated" href="#ancre2"> Bucket </a>
+        </div>
+        
+        <div class="margin1">
+
+
+            <div class="margin2">
+                <p class="text2"><b>Serveurs</b></p>
+                <p class="text1 indented">http://127.0.0.1:8080</p>
+            </div>
+
+            <div class="margin2">
+                <a name="ancre1"></a>
+                <p class="text4">Résultats</p>
+                <div class="margin3">
+                    <div>
+                        <p class="bgreen method_badge"> GET </p>
+                        <p class="text2 demi_indented inline"> /report/{id}</p>
+
+                        <div class="line">
+                            <div class="column_left max_width_1">
+                                <div class="indented">
+                                    <p class="text2"> <b>Paramètres</b> </p>
+                                    <div class="indented">
+                                        <p class="text1"> id (Path)</p>
+                                        <p class="text3 indented"> <i>Exemple: 106</i></p>
+                                    </div>
+                                    <div class="indented">
+                                        <p class="text1"> Authorization (Header)</p>
+                                        <p class="text3 indented"> <i>Exemple: Bearer ah46bx7g</i></p>
+                                    </div>
+                                </div>
+                                <div class="indented">
+                                    <p class="text2"> <b>Codes de retour</b> </p>
+                                    <div class="indented">
+                                        <p class="status_badge bgreen"> 200 </p>
+                                        <p class="status_badge bred"> 404 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column_left">
+                                <div class="indented">
+                                    <p class="text2"> <b>Exemples</b> </p>
+                                    <!-- Penser à afficher "Aucun exemples" au besoin -->
+                                    <div class="margin4 indented">
+                                        <p id="tab_1_1" class="tab_desactivated"> Body </p>
+                                        <p id="tab_1_2" class="tab_activated"> Reponse </p>
+                                        <div class="tab_div">
+                                            <p id="tab_1_3" class="tab_text">/public/report106/index.html</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="margin2">
+                <a name="ancre2"></a>
+                <p class="text4">Buckets</p>
+                <div class="margin3">
+                    <div>
+                        <p class="bgreen method_badge"> GET </p>
+                        <p class="text2 demi_indented inline"> /report/{id}</p>
+
+                        <div class="line">
+                            <div class="column_left max_width_1">
+                                <div class="indented">
+                                    <p class="text2"> <b>Paramètres</b> </p>
+                                    <div class="indented">
+                                        <p class="text1"> id (Path)</p>
+                                        <p class="text3 indented"> <i>Exemple: 106</i></p>
+                                    </div>
+                                    <div class="indented">
+                                        <p class="text1"> Authorization (Header)</p>
+                                        <p class="text3 indented"> <i>Exemple: Bearer ah46bx7g</i></p>
+                                    </div>
+                                </div>
+                                <div class="indented">
+                                    <p class="text2"> <b>Codes de retour</b> </p>
+                                    <div class="indented">
+                                        <p class="status_badge bgreen"> 200 </p>
+                                        <p class="status_badge bred"> 404 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column_left">
+                                <div class="indented">
+                                    <p class="text2"> <b>Exemples</b> </p>
+                                    <!-- Penser à afficher "Aucun exemples" au besoin -->
+                                    <div class="margin4 indented">
+                                        <p id="tab_2_1" class="tab_desactivated"> Body </p>
+                                        <p id="tab_2_2" class="tab_activated"> Reponse </p>
+                                        <div class="tab_div">
+                                            <p id="tab_2_3" class="tab_text">ee<br/>ff</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </body>
+</html>
