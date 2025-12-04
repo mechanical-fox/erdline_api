@@ -2,8 +2,6 @@
 springdoc:
     swagger-ui:
         defaultModelsExpandDepth : -1
-        try-it-out-enabled: true
-    
 
 server:
     port: 8080

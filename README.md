@@ -21,17 +21,13 @@ les documentations d'API déjà crée.
 # Changement de Certificat SSL
 
 Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé. Ce qui est utilisé    
-couramment en phase de test. Mais cela à le soucis de faire afficher des messages d'erreurs dans le navigateur      
-client, et de forcer l'utilisateur à accepter le risque de sécurité.    
+en développement, car il s'agit de la seule possibilité pour lancer un serveur https localhost. Mais cela à    
+le soucis de faire afficher des messages d'erreurs dans le navigateur client, et de forcer l'utilisateur à    
+accepter le risque de sécurité.    
 
-
-Donc ne pas oublier lors de l'utilisation en serveur d'utiliser un certificat ssl valide de type pkcs12, et de le     
-changer à chaque date d'expiration. Lors de la génération du fichier pkcs12 il vous faudra placer le certificat    
-à **keystore/cert.p12**, et générer le certificat pkcs12 avec les propriétés server.ssl.* que vous pouvez trouver     
-dans le fichier suivant [src/main/resources/application.yml](./src/main/resources/application.yml)      
-
-Attention, ne pas envoyer sur git un certificat SSL qui n'est pas un certificat auto-signé.     
-Cela constitue un risque de sécurité, car un certificat SSL assure une fonction de cryptage.   
+Donc ne pas oublier lors du déploiement de remplacer keystore/cert.p12 par un certificat valide.       
+Pour les propriétés à utiliser pour le certificat voir les propriétés déclarés dans   
+[src/main/resources/application.yml](./src/main/resources/application.yml)      
 
 
 # Execution   
@@ -60,6 +56,19 @@ Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger
 **Lien https (profil prod):**  https://localhost:8080/swagger-ui/index.html   
 
 
+# Tests unitaires    
+
+Vous pouvez lancer les tests unitaire + vérifier le taux de coverage avec la commande suivante.   
+La commande verify est configuré pour échoué si taux coverage < 70%.     
+
+```sh
+mvn verify
+```
+
+Après les tests, un rapport html avec la couverture de test sera alors crée à l'emplacement suivant    
+**target/site/jacoco/index.html**    
+
+
 # Déploiement Docker
 
 Si vous souhaitez utiliser une image docker. Vous pouvez construire l'image docker avec la commande suivante.      
@@ -67,7 +76,7 @@ Faites attention à modifier le numéro de version, selon la version de votre ih
 
 
 ```sh
-docker build -t erdline_api/1.0  .
+docker build -t erdline_1_0  .
 ```
 
 Le lancement en interactif pour tester avant déploiement se fait avec la commande suivante. En production, le flag     
@@ -75,7 +84,7 @@ Le lancement en interactif pour tester avant déploiement se fait avec la comman
 utiliser pour les fonctionnalitées admin pour votre API.     
 
 ```sh
-docker run -it -e ERDLINE_PASSWORD=password  -p 8080:8080 erdline_api/1.0
+docker run -it -e ERDLINE_PASSWORD=password  -p 8080:8080 erdline_1_0
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger
