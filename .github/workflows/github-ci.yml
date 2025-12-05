@@ -2,12 +2,12 @@ name: Tests unitaires
 
 on:
   push:
-    branches: ["feature/draft", "main"]
+    branches: ["main"]
   pull_request:
     branches: [ "main"]
 
 jobs:
-  build:
+  Unit Test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
