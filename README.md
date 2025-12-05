@@ -45,11 +45,12 @@ mvn spring-boot:run
 ```
 
 Vous pouvez aussi lancer l'API en https en utilisant la base de donnée de production avec    
-le profil prod. Vous devrez remplacer password par le mot de passe utilisé par la base de    
-donnée en production. A défaut, le programme s'arretera avec une erreur de connexion.   
+le profil prod. Vous pouvez faire cela en créant un jar, puis en lui donnant des arguments.   
+Vous devrez remplacer password par le mot de passe utilisé par la base de donnée en production.   
 
 ```sh
-mvn spring-boot:run "-Dspring.profiles.active=prod" "-Dspring.datasource.password=password"
+mvn package -DskipTests
+java -jar target/app.jar  --spring.profiles.active=prod --spring.datasource.password=password
 ```
 
 Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger.    
@@ -61,50 +62,68 @@ Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger
 
 # Tests unitaires    
 
-Vous pouvez lancer les tests unitaire + vérifier le taux de coverage avec la commande suivante.   
-La commande verify est configuré pour échoué si taux coverage < 70%.     
+Vous pouvez lancer les tests unitaire + vérifier le taux de coverage avec la commande    
+suivante. La commande verify est configuré pour échoué si taux coverage < 70%.     
 
 ```sh
 mvn verify
 ```
 
-Après les tests, un rapport html avec la couverture de test sera alors crée à l'emplacement suivant    
+Après les tests, un rapport html avec la couverture de test sera alors crée à l'emplacement    
+suivant    
 **target/site/jacoco/index.html**    
+
 
 
 # Déploiement
 
-Si vous souhaitez réaliser un déploiement. La première chose est sur le serveur servant au build de définir    
-les variables d'environnement ERDLINE_PASSWORD et DATABASE_PASSWORD. Et cela avant le build. En n'oubliant     
-pas de remplacer les mots de passe, par ceux choisis.   
 
-ERDLINE_PASSWORD définit un mot de passe demandé par l'API pour les opérations sensibles.   
-DATABASE_PASSWORD correspond au mot de passe utilisé par la base de donnée.   
+## Etape 1: Initialiser la base de donnée   
 
-Version Linux:
+Créez la structure de la base de donnée avec le script suivant.    
+Celui ci créera les tables, et index nécessaires.   
 
-```sh
-export ERDLINE_PASSWORD=first_password
-export DATABASE_PASSWORD=second_password
-```
+[script/init.sql](./script/init.sql)
 
-Une fois les mots de passe déclarés, vous pouvez ensuite construire l'image docker avec la commande suivante.      
-Faites attention à modifier le numéro de version, selon la version de l'application.       
+
+## Etape 2: Modifier le certificat SSL  
+
+Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé.    
+Ce qui est utilisé en développement. Mais cela a le soucis de faire afficher des messages     
+d'erreurs en navigateur client, et de forcer l'utilisateur à accepter le risque de sécurité.    
+
+Donc ne pas oublier lors du déploiement de remplacer keystore/cert.p12 par un certificat      
+valide. Pour les propriétés à utiliser pour le certificat voir le fichier suivant    
+     
+[src/main/resources/application.yml](./src/main/resources/application.yml)
+
+
+## Etape 3: Création de l'image docker   
+
+Une fois les mots de passe déclarés, vous pouvez ensuite construire l'image docker avec la     
+commande suivante. Faites attention à modifier le numéro de version, selon la version de     
+l'application.       
 
 
 ```sh
 docker build -t app_1_0  .
 ```
 
-Et voici maintenant la commande pour démarrer le serveur.   
+## Etape 4: Execution de l'image docker   
+
+Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Vous      
+devrez indiquer les mots de passes souhaités pour ERDLINE_PASSWORD, et DATABASE_PASSWORD, et non    
+plus juste "password".   
+
+
+ERDLINE_PASSWORD : mot de passe demandé par l'API en header Authorization pour certaines opérations.    
+DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
 ```sh
-docker run -d --name capp_1_0  -p 8080:8080 app_1_0
+docker run -d --name capp_1_0  -p 8080:8080 -e ERDLINE_PASSWORD=password -e DATABASE_PASSWORD=password  app_1_0
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger en production.    
-Pour le swagger, lorsqu'une url necessite un mot de passe, il s'agira du mot de passe ERDLINE_PASSWORD    
-que vous avez dû définir durant le build de l'image docker.   
 
 Pour un déploiement vers www.erdline.com comme actuellement, l'url du swagger est donc    
 https://www.erdline.com:8080/swagger-ui/index.html    
