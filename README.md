@@ -48,26 +48,16 @@ erreur de connexion.
 mvn spring-boot:run
 ```
 
-Vous pouvez aussi lancer l'API en https en utilisant la base de donnée de production avec le profil prod. Vous
-pouvez faire cela en créant un jar, puis en lui donnant des arguments. Vous devrez remplacer password par le
-mot de passe utilisé par la base de donnée en production.
-
-```sh
-mvn package -DskipTests
-java -jar target/app.jar  --spring.profiles.active=prod --spring.datasource.password=password
-```
 
 Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger.
 
-**Lien http:** http://localhost:8080/swagger-ui/index.html  
-
-**Lien https:**  https://localhost:8080/swagger-ui/index.html   
+http://localhost:8080/swagger-ui/index.html  
 
 
 # Tests unitaires    
 
-Vous pouvez lancer les tests unitaire + vérifier le taux de coverage avec la commande suivante. La commande
-verify est configuré pour échoué si taux coverage < 70%.
+Vous pouvez lancer les tests unitaire, puis vérifier le taux de coverage avec la commande suivante. La commande
+verify est configuré pour échoué si le taux de couverture de test est inférieur à 70%
 
 ```sh
 mvn verify
