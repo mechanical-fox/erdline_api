@@ -117,6 +117,6 @@ docker run -d --name capp_1_0  -p 8080:8080 -e ERDLINE_PASSWORD=password -e DATA
 
 Vérifiez alors que vous puissez vous connecter au swagger en production.
 
-Pour un déploiement vers www.erdline.com comme actuellement, l'url du swagger est donc
+Pour un déploiement vers erdline.com comme actuellement, l'url du swagger est donc
 
 https://erdline.com:8080/swagger-ui/index.html    
