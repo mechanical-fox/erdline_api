@@ -57,7 +57,7 @@ http://localhost:8080/swagger-ui/index.html
 # Tests unitaires    
 
 Vous pouvez lancer les tests unitaire, puis vérifier le taux de coverage avec la commande suivante. La commande
-verify est configuré pour échoué si le taux de couverture de test est inférieur à 70%
+verify est configuré pour échoué si le taux de couverture de code est inférieur à 70%
 
 ```sh
 mvn verify
@@ -74,7 +74,7 @@ Après les tests, un rapport html avec la couverture de test sera alors crée à
 
 ## Etape 1: Initialiser la base de donnée   
 
-Créez la structure de la base de donnée avec le script suivant.Celui ci créera les tables, et index
+Créez la structure de la base de donnée avec le script suivant. Celui ci créera les tables, et index
 nécessaires.
 
 [script/init.sql](./script/init.sql)
@@ -119,4 +119,4 @@ Vérifiez alors que vous puissez vous connecter au swagger en production.
 
 Pour un déploiement vers www.erdline.com comme actuellement, l'url du swagger est donc
 
-https://www.erdline.com:8080/swagger-ui/index.html    
+https://erdline.com:8080/swagger-ui/index.html    
