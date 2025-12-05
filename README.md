@@ -8,8 +8,13 @@ API qui assure les fonctions suivantes:
 - Enregistrement des exemples de documentation déjà généré   
 
 Cette API est liée au site internet Erdline, qui a pour but de permettre de créer une    
-documentation API de façon graphique. Et non en apprenant à coder avec le langage    
-OpenAI.    
+documentation API de façon graphique. Et non en utilisant un langage OpenAI qu'il est   
+nécessaire d'apprendre, afin de pouvoir générer une documentation.    
+
+Après il s'agit plus d'un site démo / vitrine à l'heure actuelle. Afin de pouvoir passer   
+mon CV, et montrer un peu un site que j'ai fait. Donc actuellement l'état en v1.0 est    
+encore assez peu avancé. En particulier la sauvegarde de documentation en cours de   
+rédaction n'est pas encore disponible.   
 
 
 # Changement de Certificat SSL
