@@ -96,8 +96,8 @@ Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat a
 en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
 forcer l'utilisateur à accepter le risque de sécurité.
 
-Donc avant déployer, vous devez remplacer keystore/cert.p12 par un certificat valide. Pour les propriétés à   
-utiliser pour le certificat voir le fichier suivant
+Donc avant de déployer, vous feriez mieux de remplacer keystore/cert.p12 par un certificat valide. Pour les 
+propriétés à utiliser pour le certificat voir le fichier suivant
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)  
 
@@ -114,8 +114,8 @@ docker build -t app_1_0  .
 
 ## Etape 4: Execution de l'image docker   
 
-Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Vous devrez indiquer
-les mots de passes souhaités pour ERDLINE_PASSWORD, et DATABASE_PASSWORD, et non plus juste "password".
+Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Faites attention à changer
+les mots de passe pour ERDLINE_PASSWORD, et DATABASE_PASSWORD. Et à ne pas laisser ceux-ci à "password".
 
 
 ERDLINE_PASSWORD : mot de passe demandé par l'API en header Authorization pour certaines opérations.    
@@ -127,5 +127,6 @@ docker run -d --name capp_1_0  -p 8080:8080 -e ERDLINE_PASSWORD=password -e DATA
 
 Vérifiez alors que vous puissez vous connecter au swagger en production.
 
-Pour un déploiement vers www.erdline.com comme actuellement, l'url du swagger est donc     
+Pour un déploiement vers www.erdline.com comme actuellement, l'url du swagger est donc
+
 https://www.erdline.com:8080/swagger-ui/index.html    
