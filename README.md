@@ -104,7 +104,7 @@ propriétés à utiliser pour le certificat voir le fichier suivant
 
 ## Etape 3: Création de l'image docker   
 
-Une fois les mots de passe déclarés, vous pouvez ensuite construire l'image docker avec la commande suivante.
+Une fois le certificat SSL mis à jour, vous pouvez ensuite construire l'image docker avec la commande suivante.
 Faites attention à modifier le numéro de version, selon la version de l'application.    
 
 
