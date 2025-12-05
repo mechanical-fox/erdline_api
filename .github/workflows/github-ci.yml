@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Tests unitaires
 
 on:
   push:
@@ -17,5 +17,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-    - name: Unit test
+    - name: Build application
+      run: mvn package -DskipTests
+    - name: Unit Test
       run: mvn verify

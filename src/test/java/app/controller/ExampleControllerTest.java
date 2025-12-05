@@ -47,7 +47,7 @@ public class ExampleControllerTest {
 	void init(){
 
 		PasswordManager.mockPassword(ExampleControllerTest.password);
-		String htmlId = "e832cefda88b46b1a";
+		String htmlId = "e832cefda88b46b1av";
 		String name = "API Unit Test";
 		String html = "<p> Hello world </p>";
 		ExampleEntity example = new ExampleEntity(htmlId, name, html);
