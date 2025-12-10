@@ -159,4 +159,20 @@ public class ExampleControllerTest {
 		assertTrue(isHtmlReturnedCorrect);
 	}
 
+
+	@Test
+	@SuppressWarnings("null")
+	void delete_example_decrease_size_by_one() throws Exception {
+
+		mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/example/e832cefda88b46b1a")
+                        .contentType("application/json")
+                        .header("Authorization",ExampleControllerTest.password))
+                            .andExpect(status().is(204));
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/example"))
+                            		.andExpect(status().is(200))
+									.andExpect(jsonPath("$.length()", is(0)));
+	}
+
 }
