@@ -44,7 +44,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 
-@CrossOrigin(origins = {"http://localhost:4200", "https://erdline.fr"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://erdline.fr","https://www.erdline.fr"})
 @Tag(name = "Documentation")
 @RestController
 public class DocumentationController {
