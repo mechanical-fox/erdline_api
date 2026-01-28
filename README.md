@@ -86,7 +86,7 @@ Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat a
 en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
 forcer l'utilisateur à accepter le risque de sécurité.
 
-Donc avant de déployer, vous feriez mieux de remplacer keystore/cert.p12 par un certificat valide. Pour les 
+Donc avant de déployer, il va falloir remplacer keystore/cert.p12 par un certificat valide. Pour les 
 propriétés à utiliser pour le certificat voir le fichier suivant
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)  
