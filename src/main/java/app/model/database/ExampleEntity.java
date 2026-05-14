@@ -1,4 +1,4 @@
-package app.data.database;
+package app.model.database;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

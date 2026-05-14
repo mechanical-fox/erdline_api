@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.repository.CrudRepository;
-import app.data.database.ExampleEntity;
+
+import app.model.database.ExampleEntity;
 
 
 public interface ExampleRepository  extends CrudRepository<ExampleEntity, Integer> {

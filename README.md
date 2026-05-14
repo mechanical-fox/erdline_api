@@ -1,19 +1,11 @@
 
+# TO DO
+
+Voir partie IHM
 
 # Projet
 
-API qui assure les fonctions suivantes:     
-- Création de documentation API    
-- Génération de la documentation API en format Html    
-- Enregistrement des exemples de documentation déjà généré   
-
-Cette API est liée au site internet Erdline, qui a pour but de permettre de créer une documentation API de
-façon graphique. Et non en utilisant un langage OpenAI qu'il est nécessaire d'apprendre, afin de pouvoir
-générer une documentation.
-
-Après il s'agit plus d'un site démo / vitrine à l'heure actuelle. Afin de pouvoir passer mon CV, et montrer
-un peu un site que j'ai fait. Donc actuellement l'état en v1.0 est encore assez peu avancé. En particulier
-la sauvegarde de documentation en cours de rédaction n'est pas encore disponible.
+TO DO
 
 
 # Changement de Certificat SSL
@@ -30,17 +22,8 @@ propriétés à utiliser pour le certificat voir le fichier suivant
 
 # Execution   
 
-Avant de lancer l'application, veuillez définir le mot de passe à utiliser pour l'API pour protéger les
-fonctionnalités admin. Sinon au démarrage le programme affichera une erreur, en l'absence de la déclaration
-de variable d'environment adéquate.
 
-Version windows(powershell):
-
-```sh
-$Env:ERDLINE_PASSWORD="password"
-```
-
-Vous pouvez ensuite lancer l'API en http en utilisant une base de donnée localhost avec le profil defaut. 
+Vous pouvez executer l'API en http en utilisant une base de donnée localhost avec le profil defaut. 
 Une base de donnée devra tourner sur votre ordinateur en port 5432, ou bien le programme s'arretera avec une
 erreur de connexion.
 
