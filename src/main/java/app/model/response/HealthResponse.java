@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class HealthResponse {
 
-    @Schema(example = "1171660c4f41406d")
-    private String API;
+    @Schema(example = "Erdline")
+    private String api;
     @Schema(example = "1.1")
     private String version;
     @Schema(example = "Running")
     private String status;
 
-    public HealthResponse(String API, String version, String status){
-        this.API = API;
+    public HealthResponse(String api, String version, String status){
+        this.api = api;
         this.version = version;
         this.status = status;
     }

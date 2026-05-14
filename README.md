@@ -31,10 +31,9 @@ erreur de connexion.
 mvn spring-boot:run
 ```
 
-
 Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger.
 
-http://localhost:8080/swagger-ui/index.html  
+http://localhost:8081/swagger-ui/index.html  
 
 
 # Tests unitaires    
@@ -88,18 +87,16 @@ docker build -t app_1_0  .
 ## Etape 4: Execution de l'image docker   
 
 Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Faites attention à changer
-les mots de passe pour ERDLINE_PASSWORD, et DATABASE_PASSWORD. Et à ne pas laisser ceux-ci à "password".
-
-
-ERDLINE_PASSWORD : mot de passe demandé par l'API en header Authorization pour certaines opérations.    
+le mots de passe pour DATABASE_PASSWORD. Et à ne pas laisser celui-ci à "password".
+ 
 DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
 ```sh
-docker run -d --name capp_1_0  -p 8080:8080 -e ERDLINE_PASSWORD=password -e DATABASE_PASSWORD=password  app_1_0
+docker run -d --name capp_1_0  -p 8080:8080 -e DATABASE_PASSWORD=password  app_1_0
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger en production.
 
 Pour un déploiement vers erdline.com comme actuellement, l'url du swagger est donc
 
-https://erdline.com:8080/swagger-ui/index.html    
+https://erdline.com:8081/swagger-ui/index.html    

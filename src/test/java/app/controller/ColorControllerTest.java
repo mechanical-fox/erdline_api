@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import app.model.database.ExampleEntity;
-import app.repository.ExampleRepository;
+import app.model.database.ColorEntity;
+import app.repository.ColorRepository;
 
 import static org.hamcrest.Matchers.is;
 
@@ -26,27 +26,23 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class ExampleControllerTest {
+public class ColorControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
 	@Autowired
-    private ExampleRepository exampleRepository;
+    private ColorRepository exampleRepository;
 
 	static boolean initialized = false;
 	static String password = "password";
 
-	/** A method to perform the initialization before each test. This function initialized the database, and the password 
-	 * used by the API for admin operations.*/
+	/** A method to perform the initialization before each test. This function initialized the database, and its content.*/
 	@BeforeEach
 	void init(){
 
 
-		String htmlId = "e832cefda88b46b1a";
-		String name = "API Unit Test";
-		String html = "<p> Hello world </p>";
-		ExampleEntity example = new ExampleEntity(htmlId, name, html);
+		ColorEntity example = new ColorEntity("Orange", "rgb(240, 138, 22)", "rgb(231, 195, 36)");
 		this.exampleRepository.deleteAll();
 		this.exampleRepository.save(example);
 		

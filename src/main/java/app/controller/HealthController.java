@@ -1,37 +1,28 @@
 
 package app.controller;
 
-
-import java.io.IOException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.xml.sax.SAXException;
-
-
-import app.model.response.HealthResponse;
-import app.repository.ExampleRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@CrossOrigin
-@Tag(name = "Exemple")
-@RestController
-public class ExampleController {
+import java.io.IOException;
+import app.model.response.HealthResponse;
 
-    @Autowired
-    private ExampleRepository exampleRepository;
+@CrossOrigin
+@Tag(name = "Surveillance")
+@RestController
+public class HealthController {
 
 
     @Operation(summary = "Vérifie l'état du serveur")
