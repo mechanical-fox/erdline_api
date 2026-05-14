@@ -11,7 +11,7 @@ import app.model.database.ColorEntity;
 
 public interface ColorRepository  extends CrudRepository<ColorEntity, Long> {
     
-    @NativeQuery("SELECT * FROM background")
+    @NativeQuery("SELECT * FROM color")
     public List<ColorEntity> list();
 
 }

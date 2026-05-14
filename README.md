@@ -81,7 +81,7 @@ Faites attention à modifier le numéro de version, selon la version de l'applic
 
 
 ```sh
-docker build -t app_1_0  .
+docker build -t app_1_1  .
 ```
 
 ## Etape 4: Execution de l'image docker   
@@ -92,7 +92,7 @@ le mots de passe pour DATABASE_PASSWORD. Et à ne pas laisser celui-ci à "passw
 DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
 ```sh
-docker run -d --name capp_1_0  -p 8080:8080 -e DATABASE_PASSWORD=password  app_1_0
+docker run -d --name capp_1_1  -p 8081:8081 -e DATABASE_PASSWORD=password  app_1_1
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger en production.

@@ -1,7 +1,5 @@
 package app.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -27,89 +25,93 @@ import java.util.Optional;
 
 import app.exception.BadRequestException;
 import app.exception.NotFoundException;
-import app.model.body.ColorBody;
-import app.model.database.ColorEntity;
-import app.repository.ColorRepository;
+import app.model.body.SpriteBody;
+import app.model.database.SpriteEntity;
+import app.repository.SpriteRepository;
+
 
 @CrossOrigin
-@Tag(name = "Couleurs")
+@Tag(name = "Sprites")
 @RestController
-public class ColorController {
+public class SpriteController {
 
     @Autowired
-    private ColorRepository colorRepository;
+    private SpriteRepository spriteRepository;
 
-    @Operation(summary = "Liste les couleurs disponibles")
+    @Operation(summary = "Liste les sprites disponibles")
     @ApiResponse(responseCode = "200", description = "Succès")
-    @GetMapping(value = "/color", produces="application/json")
-    public List<ColorEntity> listColors(){
+    @GetMapping(value = "/sprite", produces="application/json")
+    public List<SpriteEntity> listSprites(){
 
-        List<ColorEntity> colors = this.colorRepository.list();
+        List<SpriteEntity> colors = this.spriteRepository.list();
         return colors;
 
     }
 
-    @Operation(summary = "Recherche d'une couleur par Id")
+    @Operation(summary = "Recherche d'un sprite par Id")
     @Parameter(name="id", example = "1",required = true)
     @ApiResponse(responseCode = "200", description = "Succès")
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
-    @GetMapping(value="/color/{id}", produces="application/json")
-    public ColorEntity getColorById(@PathVariable @NonNull Long id) throws NotFoundException{
+    @GetMapping(value="/sprite/{id}", produces="application/json")
+    public SpriteEntity getSpriteById(@PathVariable @NonNull Long id) throws NotFoundException{
 
-        Optional<ColorEntity> color = colorRepository.findById(id);
+        Optional<SpriteEntity> sprite = spriteRepository.findById(id);
 
-        if(!color.isPresent())
+        if(!sprite.isPresent())
             throw new NotFoundException("");
 
-        return color.get();
+        return sprite.get();
 
     }
 
-    
-    @Operation(summary = "Création d'une nouvelle couleur")
+
+
+    @Operation(summary = "Création d'un nouveau sprite")
     @ApiResponse(responseCode = "201", description = "Succès", content = @Content)
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
-    @PostMapping(value="/color", produces = "text/plain")
-    public ResponseEntity<String> postColor( @RequestBody ColorBody body) throws BadRequestException{
+    @PostMapping(value="/sprite", produces = "text/plain")
+    public ResponseEntity<String> postColor( @RequestBody SpriteBody body) throws BadRequestException{
 
-        if(body.getName() == null || body.getFirstGradient() == null || body.getSecondGradient() == null)
-            throw new BadRequestException("The following fields are mandatories: name, firstGradient, secondGradient"); 
+        if(body.getName() == null || body.getData() == null)
+            throw new BadRequestException("The following fields are mandatories: name, data"); 
 
-        ColorEntity color = new ColorEntity(body.getName(), body.getFirstGradient(), body.getSecondGradient());
-        colorRepository.save(color);
+        SpriteEntity sprite = new SpriteEntity(body.getName(), body.getData());
+        spriteRepository.save(sprite);
         HttpHeaders responseHeaders = new HttpHeaders();
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
-        responseHeaders.add("Location", baseUrl + "/color/" + color.getId());
+        responseHeaders.add("Location", baseUrl + "/sprite/" + sprite.getId());
         ResponseEntity<String> answer = new ResponseEntity<String>("",responseHeaders,201);
         return answer;
 
     }
 
-    @Operation(summary = "Mise à jour d'une couleur par Id")
+
+    @Operation(summary = "Mise à jour d'un sprite par Id")
     @Parameter(name="id", example = "1",required = true)
     @ApiResponse(responseCode = "204", description = "Succès", content = @Content)
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
-    @PutMapping(value="/color/{id}", produces="text/plain")
-    public ResponseEntity<String> putColor(@PathVariable @NonNull Long id, @RequestBody ColorBody body) throws BadRequestException, NotFoundException{
+    @PutMapping(value="/sprite/{id}", produces="text/plain")
+    public ResponseEntity<String> putColor(@PathVariable @NonNull Long id, @RequestBody SpriteBody body) throws BadRequestException, NotFoundException{
 
-        if(body.getName() == null || body.getFirstGradient() == null || body.getSecondGradient() == null)
-            throw new BadRequestException("The following fields are mandatories: name, firstGradient, secondGradient"); 
+        if(body.getName() == null || body.getData() == null)
+            throw new BadRequestException("The following fields are mandatories: name, data"); 
 
-        Optional<ColorEntity> color = colorRepository.findById(id);
+        Optional<SpriteEntity> sprite = spriteRepository.findById(id);
 
-        if(!color.isPresent())
+        if(!sprite.isPresent())
             throw new NotFoundException("");
 
-        ColorEntity entity = new ColorEntity(body.getName(), body.getFirstGradient(), body.getSecondGradient());
+        SpriteEntity entity = new SpriteEntity(body.getName(), body.getData());
         entity.setId(id);
-        colorRepository.save(entity);
+        spriteRepository.save(entity);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         ResponseEntity<String> answer = new ResponseEntity<String>("", responseHeaders, 204);
         return answer;
 
     }
+
 
 
 

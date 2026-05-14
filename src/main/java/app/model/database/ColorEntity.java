@@ -12,14 +12,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Table( name="Background")
+@Table( name="COLOR")
 @Entity
 public class ColorEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Schema(example = "1")
-    Integer id;
+    Long id;
     @Schema(example = "Orange")
     String name;
     @Schema(example = "rgb(240, 138, 22)")
