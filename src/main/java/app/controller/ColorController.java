@@ -79,6 +79,7 @@ public class ColorController {
         colorRepository.save(color);
         HttpHeaders responseHeaders = new HttpHeaders();
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        responseHeaders.add("Access-Control-Expose-Headers", "Location");
         responseHeaders.add("Location", baseUrl + "/color/" + color.getId());
         ResponseEntity<String> answer = new ResponseEntity<String>("",responseHeaders,201);
         return answer;

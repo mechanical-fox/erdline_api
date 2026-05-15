@@ -70,7 +70,7 @@ public class SpriteController {
     @ApiResponse(responseCode = "201", description = "Succès", content = @Content)
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @PostMapping(value="/sprite", produces = "text/plain")
-    public ResponseEntity<String> postColor( @RequestBody SpriteBody body) throws BadRequestException{
+    public ResponseEntity<String> postSprite( @RequestBody SpriteBody body) throws BadRequestException{
 
         if(body.getName() == null || body.getData() == null)
             throw new BadRequestException("The following fields are mandatories: name, data"); 
@@ -79,6 +79,7 @@ public class SpriteController {
         spriteRepository.save(sprite);
         HttpHeaders responseHeaders = new HttpHeaders();
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        responseHeaders.add("Access-Control-Expose-Headers", "Location");
         responseHeaders.add("Location", baseUrl + "/sprite/" + sprite.getId());
         ResponseEntity<String> answer = new ResponseEntity<String>("",responseHeaders,201);
         return answer;
@@ -92,7 +93,7 @@ public class SpriteController {
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
     @PutMapping(value="/sprite/{id}", produces="text/plain")
-    public ResponseEntity<String> putColor(@PathVariable @NonNull Long id, @RequestBody SpriteBody body) throws BadRequestException, NotFoundException{
+    public ResponseEntity<String> putSprite(@PathVariable @NonNull Long id, @RequestBody SpriteBody body) throws BadRequestException, NotFoundException{
 
         if(body.getName() == null || body.getData() == null)
             throw new BadRequestException("The following fields are mandatories: name, data"); 
