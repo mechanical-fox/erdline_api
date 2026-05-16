@@ -75,7 +75,7 @@ public class SpriteController {
         if(body.getName() == null || body.getData() == null)
             throw new BadRequestException("The following fields are mandatories: name, data"); 
 
-        SpriteEntity sprite = new SpriteEntity(body.getName(), body.getData());
+        SpriteEntity sprite = new SpriteEntity(body.getName(), body.getFilename(), body.getData());
         spriteRepository.save(sprite);
         HttpHeaders responseHeaders = new HttpHeaders();
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
@@ -103,7 +103,7 @@ public class SpriteController {
         if(!sprite.isPresent())
             throw new NotFoundException("");
 
-        SpriteEntity entity = new SpriteEntity(body.getName(), body.getData());
+        SpriteEntity entity = new SpriteEntity(body.getName(), body.getFilename(), body.getData());
         entity.setId(id);
         spriteRepository.save(entity);
 
