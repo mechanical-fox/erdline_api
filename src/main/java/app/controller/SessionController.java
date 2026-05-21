@@ -75,7 +75,7 @@ public class SessionController {
     
 
     @Operation(summary = "Vérifie si la création d'une session est possible")
-    @ApiResponse(responseCode = "200", description = "Succès", content = @Content)
+    @ApiResponse(responseCode = "200", description = "Succès")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @PostMapping(value="/session/validity", produces = "application/json")
     public VerificationResponse checkSessionAvailable( @RequestBody SessionBody body) throws BadRequestException{
