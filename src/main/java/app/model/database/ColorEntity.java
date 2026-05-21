@@ -19,13 +19,13 @@ public class ColorEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Schema(example = "1")
-    Long id;
+    private Long id;
     @Schema(example = "Orange")
-    String name;
+    private String name;
     @Schema(example = "rgb(240, 138, 22)")
-    String firstGradient;
+    private String firstGradient;
     @Schema(example = "rgb(231, 195, 36)")
-    String secondGradient;
+    private String secondGradient;
 
     public ColorEntity(){
         

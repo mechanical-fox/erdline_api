@@ -21,18 +21,18 @@ public class SpriteEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Schema(example = "1")
-    Long id;
+    private Long id;
 
     @Schema(example = "Adrien")
-    String name;
+    private String name;
 
     @Schema(example = "Adrien_480.png")
-    String filename;
+    private String filename;
 
     @Column(name = "data", length = -1)
     @Schema(description = "", example = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHEl" +
     "EQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==")
-    String data;
+    private String data;
 
     public SpriteEntity(){
         this.name = null;
