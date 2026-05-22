@@ -42,23 +42,6 @@ public class Util{
         return result;
     }
 
-    
-    /** Convert an array of bytes, to a hexadecimal string */
-    private static String bytesToHex(byte[] hash) {
-
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-
-            if(hex.length() == 1) 
-                hexString.append('0');
-        
-            hexString.append(hex);
-        }
-
-        return hexString.toString();
-    }
 
     /** Convert a string from format "JJ/MM/AAAA" to an object java.sql.Date */
     public static Date toDate(String date) throws BadRequestException{
@@ -103,8 +86,27 @@ public class Util{
 
     }
 
+    
+    /** Convert an array of bytes, to a hexadecimal string */
+    private static String bytesToHex(byte[] hash) {
+
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+
+            if(hex.length() == 1) 
+                hexString.append('0');
+        
+            hexString.append(hex);
+        }
+
+        return hexString.toString();
+    }
+
+
     /** Return the integer given in the form of a string, with the size asked. A certain number of "0" will be added if necessary. */
-    public static String formatNumber(int number, int sizeExpected){
+    private static String formatNumber(int number, int sizeExpected){
         String result = "" + number;
 
         while(result.length() < sizeExpected)
