@@ -24,7 +24,7 @@ propriétés à utiliser pour le certificat voir le fichier suivant
 # Execution   
 
 
-Vous pouvez executer l'API en http en utilisant une base de donnée localhost avec le profil defaut. 
+Vous pouvez executer l'API en http en utilisant une base de donnée localhost avec le profil defaut.
 Une base de donnée devra tourner sur votre ordinateur en port 5432, ou bien le programme s'arretera avec une
 erreur de connexion.
 
@@ -50,6 +50,18 @@ Après les tests, un rapport html avec la couverture de test sera alors crée à
 
 **target/site/jacoco/index.html**    
 
+
+# Configuration Administrateur
+
+Il existe des sessions Admin, et des sessions non Admin. L'API ne permet cependant pas de créer de session Admin. Ni 
+de modifier une session déjà existante. Pour des raisons de sécurité, il a été choisit de ne permettre la création 
+d'un administrateur, que depuis la base de donnée.
+
+
+Pour créer une session administrateur:
+- Créer une session avec l'API, ou l'interface graphique
+- Se connecter à la base de donnée
+- En table REGISTERED_SESSION, mettre le paramètre "is_admin" de la session créée à true
 
 
 # Déploiement
