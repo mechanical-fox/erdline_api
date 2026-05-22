@@ -12,13 +12,16 @@ public class AuthResponse {
     private Integer expireIn;
     @Schema(example = "Bearer Authentication")
     private String authorizationType;
+    @Schema(example = "1")
+    private Long sessionId;
     @Schema(example = "false")
     private Boolean isAdmin;
 
-    public AuthResponse(String token, Integer expireIn, String authorizationType, Boolean isAdmin){
+    public AuthResponse(String token, Integer expireIn, String authorizationType, Long sessionId, Boolean isAdmin){
         this.token = token;
         this.expireIn = expireIn;
         this.authorizationType = authorizationType;
+        this.sessionId = sessionId;
         this.isAdmin = isAdmin;
     }
 

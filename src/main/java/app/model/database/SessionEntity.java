@@ -1,6 +1,7 @@
 package app.model.database;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,18 +23,22 @@ public class SessionEntity {
     private String session;
     private String hash_password; 
     private Boolean isAdmin;
+    @Column(name = "json_backgrounds", length = -1)
+    private String json_backgrounds;
 
     public SessionEntity(){
         this.id = null;
         this.session = null;
         this.hash_password = null;
         this.isAdmin = null;
+        this.json_backgrounds = null;
     }
 
-    public SessionEntity(String session, String hash_password, boolean isAdmin){
+    public SessionEntity(String session, String hash_password, boolean isAdmin, String json_backgrounds){
         this.session = session;
         this.hash_password = hash_password;
         this.isAdmin = isAdmin;
+        this.json_backgrounds = json_backgrounds;
     }
 
 }

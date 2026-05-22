@@ -3,32 +3,48 @@ package app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import app.exception.BadRequestException;
+import app.exception.NotFoundException;
 import app.exception.UnauthorizedException;
 import app.model.body.SessionBody;
+import app.model.body.SessionCheckBody;
+import app.model.body.SessionPartialBody;
 import app.model.database.SessionEntity;
 import app.model.database.TokenEntity;
 import app.model.response.AuthResponse;
+import app.model.response.SessionResponse;
 import app.model.response.VerificationResponse;
 import app.repository.SessionRepository;
 import app.repository.TokenRepository;
+import app.util.AuthUtil;
 import app.util.Util;
 
 @CrossOrigin
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "Authorization", scheme = "bearer")
 @Tag(name = "Session")
 @RestController
 public class SessionController {
@@ -64,7 +80,7 @@ public class SessionController {
             throw new BadRequestException("Password must contains at least one digit");
 
         String hash_password = Util.hash(body.getPassword());
-        SessionEntity entity = new SessionEntity(body.getSession(), hash_password, false);
+        SessionEntity entity = new SessionEntity(body.getSession(), hash_password, false, body.getJson_backgrounds());
         this.sessionRepository.save(entity);
         
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -72,13 +88,72 @@ public class SessionController {
         return answer;
 
     }
+
+    @Operation(summary = "Recherche d'une session par id")
+    @SecurityRequirement(name = "Authorization")
+    @Parameter(name="id", example = "1",required = true)
+    @ApiResponse(responseCode = "200", description = "Succès")
+    @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
+    @GetMapping(value="/session/{id}", produces = "application/json")
+    public SessionResponse getSession(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id) 
+    throws NotFoundException, UnauthorizedException{
+
+        Optional<SessionEntity> session = this.sessionRepository.findById(id);
+
+        if(!session.isPresent())
+            throw new NotFoundException("");
+
+        SessionEntity sessionByToken = AuthUtil.identifySession(headers, tokenRepository);
+
+        if(sessionByToken == null || sessionByToken.getId() != id)
+            throw new UnauthorizedException("");
+
+        Long idResponse = sessionByToken.getId();
+        String sessionName = sessionByToken.getSession();
+        Boolean isAdmin = sessionByToken.getIsAdmin();
+        String json_backgrounds = sessionByToken.getJson_backgrounds();
+        SessionResponse response = new SessionResponse(idResponse, sessionName,isAdmin, json_backgrounds);
+        return response;
+    }
+
+    @Operation(summary = "Modification partielle d'une session par id")
+    @SecurityRequirement(name = "Authorization")
+    @Parameter(name="id", example = "1",required = true)
+    @ApiResponse(responseCode = "204", description = "Succès", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
+    @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
+    @PatchMapping(value="/session/{id}", produces = "text/plain")
+    public ResponseEntity<String> patchSession(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id,
+    @RequestBody SessionPartialBody body) 
+    throws NotFoundException, UnauthorizedException{
+
+        Optional<SessionEntity> session = this.sessionRepository.findById(id);
+
+        if(!session.isPresent())
+            throw new NotFoundException("");
+
+        SessionEntity sessionByToken = AuthUtil.identifySession(headers, tokenRepository);
+
+        if(sessionByToken == null || sessionByToken.getId() != id)
+            throw new UnauthorizedException("");
+
+        if(body.getJson_backgrounds() != null)
+            sessionByToken.setJson_backgrounds(body.getJson_backgrounds());
+
+        this.sessionRepository.save(sessionByToken);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        ResponseEntity<String> answer = new ResponseEntity<String>("",responseHeaders,204);
+        return answer;
+    }
     
 
     @Operation(summary = "Vérifie si la création d'une session est possible")
     @ApiResponse(responseCode = "200", description = "Succès")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @PostMapping(value="/session/validity", produces = "application/json")
-    public VerificationResponse checkSessionAvailable( @RequestBody SessionBody body) throws BadRequestException{
+    public VerificationResponse checkSessionAvailable( @RequestBody SessionCheckBody body) throws BadRequestException{
 
         if(body.getSession() == null || body.getPassword() == null)
             throw new BadRequestException("The following fields are mandatories: session, password"); 
@@ -105,7 +180,7 @@ public class SessionController {
     @ApiResponse(responseCode = "200", description = "Succès")
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content=@Content)
     @PostMapping(value="/auth", produces="application/json")
-    public AuthResponse requestToken(@RequestBody SessionBody body) throws UnauthorizedException, NoSuchAlgorithmException{
+    public AuthResponse requestToken(@RequestBody SessionCheckBody body) throws UnauthorizedException, NoSuchAlgorithmException{
 
         if(body.getSession() == null || body.getPassword() == null)
             throw new UnauthorizedException("The following fields are mandatories: session, password");
@@ -126,7 +201,8 @@ public class SessionController {
         TokenEntity tokenEntity = new TokenEntity(token, session, expirationDate);
         this.tokenRepository.save(tokenEntity);
         this.tokenRepository.deleteExpiredTokens();
-        return new AuthResponse(token, SessionController.TOKEN_DURATION_SECOND, "Bearer Authentication",  session.getIsAdmin());
+        return new AuthResponse(token, SessionController.TOKEN_DURATION_SECOND, "Bearer Authentication", session.getId(), session.getIsAdmin());
     }
+
 
 }

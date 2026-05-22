@@ -6,18 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SessionBody {
-    
-    @Schema(example = "MysticalAshes")
-    private String session;
-    @Schema(example = "sKyrIm-4678")
-    private String password;
+public class SessionPartialBody {
+
     @Schema(example = "[{\"counter\" : 1, \"id\" : \"background-1\", \"name\" : \"Jardin\", \"color_id\" : \"color-3\"}+]")
     private String json_backgrounds;
 
-    public SessionBody(){
-        this.session = null;
-        this.password = null;
+    public SessionPartialBody(){
         this.json_backgrounds = null;
     }
+
 }
