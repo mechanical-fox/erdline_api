@@ -80,7 +80,8 @@ public class SessionController {
             throw new BadRequestException("Password must contains at least one digit");
 
         String hash_password = Util.hash(body.getPassword());
-        SessionEntity entity = new SessionEntity(body.getSession(), hash_password, false, body.getJson_backgrounds());
+        SessionEntity entity = new SessionEntity(body.getSession(), hash_password, false, body.getJson_backgrounds(),
+            body.getJson_characters());
         this.sessionRepository.save(entity);
         
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -113,7 +114,8 @@ public class SessionController {
         String sessionName = sessionByToken.getSession();
         Boolean isAdmin = sessionByToken.getIsAdmin();
         String json_backgrounds = sessionByToken.getJson_backgrounds();
-        SessionResponse response = new SessionResponse(idResponse, sessionName,isAdmin, json_backgrounds);
+        String json_characters = sessionByToken.getJson_characters();
+        SessionResponse response = new SessionResponse(idResponse, sessionName,isAdmin, json_backgrounds, json_characters);
         return response;
     }
 

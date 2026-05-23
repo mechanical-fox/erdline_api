@@ -25,6 +25,8 @@ public class SessionEntity {
     private Boolean isAdmin;
     @Column(name = "json_backgrounds", length = -1)
     private String json_backgrounds;
+    @Column(name = "json_characters", length = -1)
+    private String json_characters;
 
     public SessionEntity(){
         this.id = null;
@@ -32,13 +34,15 @@ public class SessionEntity {
         this.hash_password = null;
         this.isAdmin = null;
         this.json_backgrounds = null;
+        this.json_characters = null;
     }
 
-    public SessionEntity(String session, String hash_password, boolean isAdmin, String json_backgrounds){
+    public SessionEntity(String session, String hash_password, boolean isAdmin, String json_backgrounds, String json_characters){
         this.session = session;
         this.hash_password = hash_password;
         this.isAdmin = isAdmin;
         this.json_backgrounds = json_backgrounds;
+        this.json_characters = json_characters;
     }
 
 }
