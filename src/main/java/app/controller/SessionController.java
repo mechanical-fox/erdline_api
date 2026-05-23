@@ -142,6 +142,8 @@ public class SessionController {
 
         if(body.getJson_backgrounds() != null)
             sessionByToken.setJson_backgrounds(body.getJson_backgrounds());
+        if(body.getJson_characters() != null)
+            sessionByToken.setJson_characters(body.getJson_characters());
 
         this.sessionRepository.save(sessionByToken);
 
