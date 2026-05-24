@@ -81,7 +81,7 @@ public class SessionController {
 
         String hash_password = Util.hash(body.getPassword());
         SessionEntity entity = new SessionEntity(body.getSession(), hash_password, false, body.getJson_backgrounds(),
-            body.getJson_characters());
+            body.getJson_characters(), body.getJson_scenes());
         this.sessionRepository.save(entity);
         
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -115,7 +115,8 @@ public class SessionController {
         Boolean isAdmin = sessionByToken.getIsAdmin();
         String json_backgrounds = sessionByToken.getJson_backgrounds();
         String json_characters = sessionByToken.getJson_characters();
-        SessionResponse response = new SessionResponse(idResponse, sessionName,isAdmin, json_backgrounds, json_characters);
+        String json_scenes = sessionByToken.getJson_scenes();
+        SessionResponse response = new SessionResponse(idResponse, sessionName,isAdmin, json_backgrounds, json_characters, json_scenes);
         return response;
     }
 
@@ -144,6 +145,8 @@ public class SessionController {
             sessionByToken.setJson_backgrounds(body.getJson_backgrounds());
         if(body.getJson_characters() != null)
             sessionByToken.setJson_characters(body.getJson_characters());
+        if(body.getJson_scenes() != null)
+            sessionByToken.setJson_scenes(body.getJson_scenes());
 
         this.sessionRepository.save(sessionByToken);
 
