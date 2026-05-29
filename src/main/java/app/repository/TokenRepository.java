@@ -15,9 +15,9 @@ public interface TokenRepository extends CrudRepository<TokenEntity, Long> {
     @Modifying
     @Transactional
     @NativeQuery("DELETE FROM registered_token WHERE expiration_date < NOW()")
-    void deleteExpiredTokens();
+    public void deleteExpiredTokens();
 
     @NativeQuery("SELECT rs.* FROM registered_token rt INNER JOIN registered_session rs ON rt.fk_session = rs.id" + 
     " WHERE rt.token = ?1 and rt.expiration_date > NOW();")
-    List<SessionEntity> queryBearerByToken(String token);
+    public List<SessionEntity> queryBearerByToken(String token);
 }

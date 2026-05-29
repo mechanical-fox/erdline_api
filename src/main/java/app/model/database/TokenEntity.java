@@ -25,13 +25,13 @@ public class TokenEntity {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long id;
-    String token;
+    private Long id;
+    private String token;
 
     @ManyToOne
     @JoinColumn(name = "fk_session")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    SessionEntity session;
+    private SessionEntity session;
 
     Timestamp expiration_date;
 

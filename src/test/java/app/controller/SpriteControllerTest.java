@@ -20,11 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.security.NoSuchAlgorithmException;
 import java.time.OffsetDateTime;
 
-import app.model.database.ColorEntity;
+
 import app.model.database.SessionEntity;
+import app.model.database.SpriteEntity;
 import app.model.database.TokenEntity;
-import app.repository.ColorRepository;
 import app.repository.SessionRepository;
+import app.repository.SpriteRepository;
 import app.repository.TokenRepository;
 import helper.Helper;
 
@@ -34,12 +35,12 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class ColorControllerTest {
+public class SpriteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 	@Autowired
-    private ColorRepository colorRepository;
+    private SpriteRepository spriteRepository;
 	@Autowired
     private SessionRepository sessionRepository;
 	@Autowired
@@ -48,115 +49,58 @@ public class ColorControllerTest {
 	static private final String TEST_TOKEN = "1171660c4f41406d";
 
 
-	
 	@BeforeEach
 	public void init() throws NoSuchAlgorithmException{
 
 		String hash = Helper.hash("password");
 		OffsetDateTime expirationDate = OffsetDateTime.now().plusSeconds(3600);
+        String data1 = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4";
+        String data2 = "data:image/png;base64, iVBORw0KGgoAAAANSUhBK0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
-		ColorEntity color1 = new ColorEntity("Orange", "rgb(240, 138, 22)", "rgb(231, 195, 36)");
-		ColorEntity color2 = new ColorEntity("Noir", "rgb(32, 32, 32)", "rgb(97, 97, 97)");
-		ColorEntity color3 = new ColorEntity("Bleu", "rgb(21, 59, 226)", "rgb(44, 141, 206)");
+        SpriteEntity sprite1 = new SpriteEntity("Adrien", "Adrien.png", data1);
+        SpriteEntity sprite2 = new SpriteEntity("Grace", "Grace.png", data2);
 		SessionEntity session = new SessionEntity("MysticalAshes", hash, true, null, null, null);
-		TokenEntity token = new TokenEntity(ColorControllerTest.TEST_TOKEN, session, expirationDate);
+		TokenEntity token = new TokenEntity(SpriteControllerTest.TEST_TOKEN, session, expirationDate);
 
-		this.colorRepository.deleteAll();
-		this.colorRepository.save(color1);
-		this.colorRepository.save(color2);
-		this.colorRepository.save(color3);
+        this.spriteRepository.deleteAll();
+        this.spriteRepository.save(sprite1);
+        this.spriteRepository.save(sprite2);
 		this.sessionRepository.deleteAll();
 		this.sessionRepository.save(session);
 		this.tokenRepository.deleteAll();
 		this.tokenRepository.save(token);
 	}
 
-	
-	@Test
+    @Test
 	@SuppressWarnings("null")
-	public void testListColors() throws Exception {
+	public void testListSprites() throws Exception {
+
+        String data1 = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4";
+        String data2 = "data:image/png;base64, iVBORw0KGgoAAAANSUhBK0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 		
 		mockMvc.perform(MockMvcRequestBuilders
-                        	.get("/color"))
+                        	.get("/sprite"))
                             	.andExpect(status().is(200))
-								.andExpect(jsonPath("$.length()", is(3)))
-								.andExpect(jsonPath("$[0].name", is("Orange")))
-								.andExpect(jsonPath("$[0].firstGradient", is("rgb(240, 138, 22)")))
-								.andExpect(jsonPath("$[0].secondGradient", is("rgb(231, 195, 36)")))
-								.andExpect(jsonPath("$[1].name", is("Noir")))
-								.andExpect(jsonPath("$[1].firstGradient", is("rgb(32, 32, 32)")))
-								.andExpect(jsonPath("$[1].secondGradient", is("rgb(97, 97, 97)")));
+								.andExpect(jsonPath("$.length()", is(2)))
+								.andExpect(jsonPath("$[0].name", is("Adrien")))
+								.andExpect(jsonPath("$[0].filename", is("Adrien.png")))
+								.andExpect(jsonPath("$[0].data", is(data1)))
+								.andExpect(jsonPath("$[1].name", is("Grace")))
+								.andExpect(jsonPath("$[1].filename", is("Grace.png")))
+								.andExpect(jsonPath("$[1].data", is(data2)));
 							
 		
 	}
 
-
-	@Test
+    @Test
 	@SuppressWarnings("null")
-	public void testGetColorById() throws Exception {
+	public void testGetSpriteById() throws Exception {
+
+        String data = "data:image/png;base64, iVBORw0KGgoAAAANSUhBK0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                        	.get("/color"))
+                        	.get("/sprite"))
                             	.andExpect(status().is(200))
-								.andReturn();
-
-		String answer = result.getResponse().getContentAsString();
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode json = objectMapper.readTree(answer);
-		JsonNode thirdItem = json.get(2);
-		Integer id = thirdItem.get("id").asInt();
-		
-		mockMvc.perform(MockMvcRequestBuilders
-                        	.get("/color/" + id))
-                            	.andExpect(status().is(200))
-								.andExpect(jsonPath("$.name", is("Bleu")))
-								.andExpect(jsonPath("$.firstGradient", is("rgb(21, 59, 226)")))
-								.andExpect(jsonPath("$.secondGradient", is("rgb(44, 141, 206)")));
-							
-	}
-
-
-	@Test
-	@SuppressWarnings("null")
-	public void testCreateColor() throws Exception {
-		
-		mockMvc.perform(MockMvcRequestBuilders
-                        	.get("/color"))
-                            	.andExpect(status().is(200))
-								.andExpect(jsonPath("$.length()", is(3)));
-
-		String content = Helper.readAll("src/test/resources/bodyColor.json");
-        String body = content == null ? "" : content;
-
-		mockMvc.perform(MockMvcRequestBuilders
-                    .post("/color")
-                    .contentType("application/json")
-					.header("Authorization", "Bearer " + TEST_TOKEN)
-                    .content(body))
-                    	.andExpect(status().is(201));
-
-		mockMvc.perform(MockMvcRequestBuilders
-                .get("/color"))
-                	.andExpect(status().is(200))
-					.andExpect(jsonPath("$.length()", is(4)))
-					.andExpect(jsonPath("$[3].name", is("Vert")))
-					.andExpect(jsonPath("$[3].firstGradient", is("rgb(36, 180, 48)")))
-					.andExpect(jsonPath("$[3].secondGradient", is("rgb(89, 243, 102)")));
-							
-	}
-
-
- 	@Test
-	@SuppressWarnings("null")
-	public void testModifyColor() throws Exception {
-		
-		MvcResult result =  mockMvc.perform(MockMvcRequestBuilders
-                        	.get("/color"))
-                            	.andExpect(status().is(200))
-								.andExpect(jsonPath("$.length()", is(3)))
-								.andExpect(jsonPath("$[1].name", is("Noir")))
-								.andExpect(jsonPath("$[1].firstGradient", is("rgb(32, 32, 32)")))
-								.andExpect(jsonPath("$[1].secondGradient", is("rgb(97, 97, 97)")))
 								.andReturn();
 
 		String answer = result.getResponse().getContentAsString();
@@ -164,28 +108,85 @@ public class ColorControllerTest {
 		JsonNode json = objectMapper.readTree(answer);
 		JsonNode secondItem = json.get(1);
 		Integer id = secondItem.get("id").asInt();
+		
+		mockMvc.perform(MockMvcRequestBuilders
+                        	.get("/sprite/" + id))
+                            	.andExpect(status().is(200))
+								.andExpect(jsonPath("$.name", is("Grace")))
+								.andExpect(jsonPath("$.filename", is("Grace.png")))
+								.andExpect(jsonPath("$.data", is(data)));
+							
+	}
 
-		String content = Helper.readAll("src/test/resources/bodyColor.json");
+	@Test
+	@SuppressWarnings("null")
+	public void testCreateSprite() throws Exception {
+		
+		mockMvc.perform(MockMvcRequestBuilders
+                        	.get("/sprite"))
+                            	.andExpect(status().is(200))
+								.andExpect(jsonPath("$.length()", is(2)));
+
+		String content = Helper.readAll("src/test/resources/bodySprite.json");
         String body = content == null ? "" : content;
 
 		mockMvc.perform(MockMvcRequestBuilders
-                    .put("/color/" + id)
+                    .post("/sprite")
+                    .contentType("application/json")
+					.header("Authorization", "Bearer " + TEST_TOKEN)
+                    .content(body))
+                    	.andExpect(status().is(201));
+
+		mockMvc.perform(MockMvcRequestBuilders
+                .get("/sprite"))
+                	.andExpect(status().is(200))
+					.andExpect(jsonPath("$.length()", is(3)))
+					.andExpect(jsonPath("$[2].name", is("Nathaniel")))
+					.andExpect(jsonPath("$[2].filename", is("barman.png")))
+					.andExpect(jsonPath("$[2].data", is("data:image/png;base64, iVBORw0KGgAACNbyQI12P4//8/w38GIAXDIBKE0DU5ErkJggg==")));
+							
+	}
+
+ 	@Test
+	@SuppressWarnings("null")
+	public void testModifySprite() throws Exception {
+
+        String data = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4";
+        String newData = "data:image/png;base64, iVBORw0KGgAACNbyQI12P4//8/w38GIAXDIBKE0DU5ErkJggg==";
+		
+		MvcResult result =  mockMvc.perform(MockMvcRequestBuilders
+                        	.get("/sprite"))
+                            	.andExpect(status().is(200))
+								.andExpect(jsonPath("$.length()", is(2)))
+								.andExpect(jsonPath("$[0].name", is("Adrien")))
+								.andExpect(jsonPath("$[0].filename", is("Adrien.png")))
+								.andExpect(jsonPath("$[0].data", is(data)))
+								.andReturn();
+
+		String answer = result.getResponse().getContentAsString();
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode json = objectMapper.readTree(answer);
+		JsonNode firstItem = json.get(0);
+		Integer id = firstItem.get("id").asInt();
+
+		String content = Helper.readAll("src/test/resources/bodySprite.json");
+        String body = content == null ? "" : content;
+
+		mockMvc.perform(MockMvcRequestBuilders
+                    .put("/sprite/" + id)
                     .contentType("application/json")
 					.header("Authorization", "Bearer " + TEST_TOKEN)
                     .content(body))
                     	.andExpect(status().is(204));
 
 		mockMvc.perform(MockMvcRequestBuilders
-                .get("/color"))
+                .get("/sprite"))
                 	.andExpect(status().is(200))
-					.andExpect(jsonPath("$.length()", is(3)))
-					.andExpect(jsonPath("$[1].name", is("Vert")))
-					.andExpect(jsonPath("$[1].firstGradient", is("rgb(36, 180, 48)")))
-					.andExpect(jsonPath("$[1].secondGradient", is("rgb(89, 243, 102)")));
+					.andExpect(jsonPath("$.length()", is(2)))
+					.andExpect(jsonPath("$[0].name", is("Nathaniel")))
+					.andExpect(jsonPath("$[0].filename", is("barman.png")))
+					.andExpect(jsonPath("$[0].data", is(newData)));
 							
 	}
-
-
-
 
 }

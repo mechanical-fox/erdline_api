@@ -22,12 +22,12 @@ import static org.hamcrest.Matchers.is;
 public class HealthControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
 
 	@Test
 	@SuppressWarnings("null")
-	void testHealthReturnStatusRunning() throws Exception {
+	public void testHealthReturnStatusRunning() throws Exception {
 		
 		mockMvc.perform(MockMvcRequestBuilders
                         	.get("/health"))
