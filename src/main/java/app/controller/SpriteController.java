@@ -84,7 +84,7 @@ public class SpriteController {
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @PostMapping(value="/sprite", produces = "text/plain")
-    public ResponseEntity<String> postSprite(@RequestHeader HttpHeaders headers, @RequestBody SpriteBody body) 
+    public ResponseEntity<String> createSprite(@RequestHeader HttpHeaders headers, @RequestBody SpriteBody body) 
     throws BadRequestException, UnauthorizedException{
 
         if(body.getName() == null || body.getData() == null)
@@ -117,7 +117,7 @@ public class SpriteController {
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
     @PutMapping(value="/sprite/{id}", produces="text/plain")
-    public ResponseEntity<String> putSprite(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id, 
+    public ResponseEntity<String> modifySprite(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id, 
     @RequestBody SpriteBody body) throws BadRequestException, UnauthorizedException, NotFoundException{
 
         if(body.getName() == null || body.getData() == null)

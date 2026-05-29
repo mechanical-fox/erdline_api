@@ -84,7 +84,7 @@ public class ColorController {
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content)
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @PostMapping(value="/color", produces = "text/plain")
-    public ResponseEntity<String> postColor(@RequestHeader HttpHeaders headers, @RequestBody ColorBody body) 
+    public ResponseEntity<String> createColor(@RequestHeader HttpHeaders headers, @RequestBody ColorBody body) 
     throws BadRequestException, UnauthorizedException{
 
         if(body.getName() == null || body.getFirstGradient() == null || body.getSecondGradient() == null)
@@ -116,7 +116,7 @@ public class ColorController {
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
     @PutMapping(value="/color/{id}", produces="text/plain")
-    public ResponseEntity<String> putColor(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id, 
+    public ResponseEntity<String> modifyColor(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id, 
     @RequestBody ColorBody body) throws BadRequestException, NotFoundException, UnauthorizedException{
 
         if(body.getName() == null || body.getFirstGradient() == null || body.getSecondGradient() == null)

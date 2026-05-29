@@ -97,7 +97,7 @@ public class SessionController {
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @ApiResponse(responseCode = "404", description = "Ressource Inexistante", content = @Content)
     @GetMapping(value="/session/{id}", produces = "application/json")
-    public SessionResponse getSession(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id) 
+    public SessionResponse getSessionById(@RequestHeader HttpHeaders headers, @PathVariable @NonNull Long id) 
     throws NotFoundException, UnauthorizedException{
 
         Optional<SessionEntity> session = this.sessionRepository.findById(id);
