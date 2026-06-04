@@ -43,49 +43,6 @@ public class Util{
     }
 
 
-    /** Convert a string from format "JJ/MM/AAAA" to an object java.sql.Date */
-    public static Date toDate(String date) throws BadRequestException{
-        if(date == null || "".equals(date.trim()))
-            return null;
-
-        if(date.length() != "JJ/MM/AAAA".length())
-            throw new BadRequestException("A field date must be in the format JJ/MM/AAAA");
-
-        String day = date.substring(0,2);
-        String month = date.substring(3,5);
-        String year = date.substring(6,10);
-
-        
-        try{
-            Integer dayParsed = Integer.valueOf(day);
-            Integer  monthParsed = Integer.valueOf(month);
-            Integer  yearParsed = Integer.valueOf(year);
-            LocalDate localDate = LocalDate.of(yearParsed, monthParsed, dayParsed);
-
-            long millisecondsPerDay = 1000 * 60 * 60 * 24;
-            Date result = new Date(localDate.toEpochDay() * millisecondsPerDay);
-            return result;
-        }
-        catch(NumberFormatException err){
-            throw new BadRequestException("A field date must be in the format JJ/MM/AAAA");
-        }
-
-    }
-
-    /** Convert an object java.sql.Date to a string format "JJ/MM/AAAA" */
-    public static String toString(Date date){
-        if(date == null)
-            return null;
-
-        long millisecondsPerDay = 1000 * 60 * 60 * 24;
-        LocalDate d = LocalDate.ofEpochDay((long)(date.getTime() + millisecondsPerDay * 0.5) / millisecondsPerDay);
-        String day = Util.formatNumber(d.getDayOfMonth(), 2);
-        String month = Util.formatNumber(d.getMonthValue(), 2);
-        String year = Util.formatNumber(d.getYear(), 4);
-        return day + "/" + month + "/" + year;
-
-    }
-
     
     /** Convert an array of bytes, to a hexadecimal string */
     private static String bytesToHex(byte[] hash) {

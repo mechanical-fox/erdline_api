@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.security.NoSuchAlgorithmException;
@@ -96,6 +97,45 @@ public class SessionControllerTest {
                                 .andExpect(jsonPath("$.isAdmin", is(true)));
     }
 
+    @Test
+    public void testRequestTokenBadPassword() throws Exception{
+
+        String body = "{ \"session\": \"MysticalAshes\", \"password\": \"Exploit\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                            .post("/auth")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(401))
+                                .andExpect(content().string("Password incorrect"));
+    }
+
+    @Test
+    public void testRequestTokenFieldsMissing() throws Exception{
+
+        String body = "{ \"session\": \"MysticalAshes\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                            .post("/auth")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(401))
+                                .andExpect(content().string("The following fields are mandatories: session, password"));
+    }
+
+    @Test
+    public void testRequestTokenSessionInexisting() throws Exception{
+
+        String body = "{ \"session\": \"Anonymous\", \"password\": \"Red-46-Green-68-Azur\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                            .post("/auth")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(401))
+                                .andExpect(content().string("Session not Found"));
+    }
+
 
     @Test
 	@SuppressWarnings("null")
@@ -141,6 +181,144 @@ public class SessionControllerTest {
                             .andExpect(jsonPath("$.json_scenes", containsString(",\"counter\":1,\"id\":\"scene-1\",\"name\":\"Meeting\"")));
 
 
+    }
+
+
+
+    @Test
+	@SuppressWarnings("null")
+    public void testGetSessionById() throws Exception{
+
+        String content = Helper.readAll("src/test/resources/bodyAuth.json");
+        String body = content == null ? "" : content;
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                            .post("/auth")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(200))
+					            .andExpect(jsonPath("$.token", notNullValue()))
+                                .andExpect(jsonPath("$.expireIn", is(3600)))
+                                .andExpect(jsonPath("$.authorizationType", is("Bearer Authentication")))
+                                .andExpect(jsonPath("$.sessionId", notNullValue()))
+                                .andExpect(jsonPath("$.isAdmin", is(true)))
+                                .andReturn();
+
+        String answer = result.getResponse().getContentAsString();
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode json = objectMapper.readTree(answer);
+        Integer id = json.get("sessionId").asInt();
+        String token = json.get("token").asText();
+
+         mockMvc.perform(MockMvcRequestBuilders
+                    .get("/session/" + id)
+                    .header("Authorization", "Bearer " + token))
+                        .andExpect(status().is(200))
+                        .andExpect(jsonPath("$.id", is(id)))
+                        .andExpect(jsonPath("$.session", is("MysticalAshes")))
+                        .andExpect(jsonPath("$.password", is("******")))
+                        .andExpect(jsonPath("$.isAdmin", is(true)))
+                        .andExpect(jsonPath("$.json_backgrounds", containsString("\"name\":\"Guilde\",\"color_id\":1}")))
+                        .andExpect(jsonPath("$.json_characters", containsString("\"counter\":1,\"name\":\"Joie\",\"sprite_id\":\"2\"}]}")))
+                        .andExpect(jsonPath("$.json_scenes", containsString("Adrien regarde alors autour de lui. Puis se rend compte que")));
+
+    }
+
+    @Test
+	@SuppressWarnings("null")
+    public void testPatchSession() throws Exception{
+
+        String content = Helper.readAll("src/test/resources/bodyAuth.json");
+        String body = content == null ? "" : content;
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                            .post("/auth")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(200))
+					            .andExpect(jsonPath("$.token", notNullValue()))
+                                .andExpect(jsonPath("$.expireIn", is(3600)))
+                                .andExpect(jsonPath("$.authorizationType", is("Bearer Authentication")))
+                                .andExpect(jsonPath("$.sessionId", notNullValue()))
+                                .andExpect(jsonPath("$.isAdmin", is(true)))
+                                .andReturn();
+
+        String answer = result.getResponse().getContentAsString();
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode json = objectMapper.readTree(answer);
+        Integer id = json.get("sessionId").asInt();
+        String token = json.get("token").asText();
+
+        String content2 = Helper.readAll("src/test/resources/bodyPatch.json");
+        String body2 = content2 == null ? "" : content2;
+
+        mockMvc.perform(MockMvcRequestBuilders
+                    .get("/session/" + id)
+                    .header("Authorization", "Bearer " + token))
+                        .andExpect(status().is(200))
+                        .andExpect(jsonPath("$.id", is(id)))
+                        .andExpect(jsonPath("$.session", is("MysticalAshes")))
+                        .andExpect(jsonPath("$.password", is("******")))
+                        .andExpect(jsonPath("$.isAdmin", is(true)))
+                        .andExpect(jsonPath("$.json_backgrounds", containsString("\"name\":\"Guilde\",\"color_id\":1}")))
+                        .andExpect(jsonPath("$.json_characters", containsString("\"counter\":1,\"name\":\"Joie\",\"sprite_id\":\"2\"}]}")))
+                        .andExpect(jsonPath("$.json_scenes", containsString("Adrien regarde alors autour de lui. Puis se rend compte que")));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                    .patch("/session/" + id)
+                    .header("Authorization", "Bearer " + token)
+                    .contentType("application/json")
+                    .content(body2))
+                        .andExpect(status().is(204));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                    .get("/session/" + id)
+                    .header("Authorization", "Bearer " + token))
+                        .andExpect(status().is(200))
+                        .andExpect(jsonPath("$.id", is(id)))
+                        .andExpect(jsonPath("$.session", is("MysticalAshes")))
+                        .andExpect(jsonPath("$.password", is("******")))
+                        .andExpect(jsonPath("$.isAdmin", is(true)))
+                        .andExpect(jsonPath("$.json_backgrounds", containsString("\"name\" : \"Study\", \"color_id\" : 5")))
+                        .andExpect(jsonPath("$.json_characters", containsString(" \"id\" : \"mini-boss\", \"name\": \"Lorenzo\"")))
+                        .andExpect(jsonPath("$.json_scenes", containsString("Adrien regarde alors autour de lui. Puis se rend compte que")));
+
+    }
+
+    @Test
+	@SuppressWarnings("null")
+    public void testCheckSessionAvailable1() throws Exception{
+        String body = "{ \"session\": \"MysticalAshes\", \"password\": \"abcde\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                            .post("/session/validity")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(200))
+					            .andExpect(jsonPath("$.sessionAlreadyExisting", is(true)))
+                                .andExpect(jsonPath("$.atLeastSixCharacters", is(false)))
+                                .andExpect(jsonPath("$.includeLowercaseCharacters", is(true)))
+                                .andExpect(jsonPath("$.includeUppercaseCharacters", is(false)))
+                                .andExpect(jsonPath("$.includeDigits", is(false)))
+                                .andExpect(jsonPath("$.creationPossible", is(false)));
+    }
+
+    @Test
+	@SuppressWarnings("null")
+    public void testCheckSessionAvailable2() throws Exception{
+        String body = "{ \"session\": \"SleepingFox\", \"password\": \"Azur-7-Green\"}";
+
+        mockMvc.perform(MockMvcRequestBuilders
+                            .post("/session/validity")
+                            .contentType("application/json")
+                            .content(body))
+                                .andExpect(status().is(200))
+					            .andExpect(jsonPath("$.sessionAlreadyExisting", is(false)))
+                                .andExpect(jsonPath("$.atLeastSixCharacters", is(true)))
+                                .andExpect(jsonPath("$.includeLowercaseCharacters", is(true)))
+                                .andExpect(jsonPath("$.includeUppercaseCharacters", is(true)))
+                                .andExpect(jsonPath("$.includeDigits", is(true)))
+                                .andExpect(jsonPath("$.creationPossible", is(true)));
     }
 
 }

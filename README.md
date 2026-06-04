@@ -3,6 +3,12 @@
 
 Voir partie IHM
 
+Couverture Tests Unitaire API.
+
+04/06/2026:
+    - debut: 65% statement, 39% branche
+    - fin: 85% statement, 62% branche
+
 
 # Projet
 
