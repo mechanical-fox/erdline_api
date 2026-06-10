@@ -45,7 +45,7 @@ import app.util.Util;
 
 @CrossOrigin
 @SecurityScheme(type = SecuritySchemeType.HTTP, name = "Authorization", scheme = "bearer")
-@Tag(name = "Session")
+@Tag(name = "Sessions")
 @RestController
 public class SessionController {
 

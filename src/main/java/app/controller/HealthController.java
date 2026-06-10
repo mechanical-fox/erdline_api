@@ -20,7 +20,7 @@ import java.io.IOException;
 import app.model.response.HealthResponse;
 
 @CrossOrigin
-@Tag(name = "Surveillance")
+@Tag(name = "Observabilité")
 @RestController
 public class HealthController {
 
