@@ -58,15 +58,5 @@ public class Util{
         return hexString.toString();
     }
 
-
-    /** Return the integer given in the form of a string, with the size asked. A certain number of "0" will be added if necessary. */
-    private static String formatNumber(int number, int sizeExpected){
-        String result = "" + number;
-
-        while(result.length() < sizeExpected)
-            result = "0" + result;
-
-        return result;
-    }
     
 }
