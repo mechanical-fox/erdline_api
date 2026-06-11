@@ -1,22 +1,33 @@
 
-# TO DO
-
-Voir partie IHM
-
 
 # Projet
 
-TO DO
+Ce projet contient le code de la partie backend / serveur, du site Erdline. Ce site à pour but de permettre
+la création de jeux de type Visual Novel. Afin d'aider à pouvoir plus facilement tester une idée de Visual
+Novel, des sprites de base sont fournis, et il est utilisé comme décors de simples dégradés de couleurs.
+
+Les fonctionnalités actuelles sont les suivantes:
+- Sauvegarde via le système de session
+- Possibilité de créer des Visual Novels de type Kinetic
+- Décors gérés sous formes de dégradés de couleurs
+- Gestion des Sprites des personnages 
+- Page Exemple
+- Page A propos
 
 
-# Changement de Certificat SSL
+# Utilisation du mode HTTPS
 
-Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé. Ce qui est utilisé
-en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
-forcer l'utilisateur à accepter le risque de sécurité.
+Cette API fonctionne actuellement en HTTP, et non en HTTPS y compris en production. Cela est une modification
+effectuée, car après test un portfolio sous forme de site internet rencontre assez peu de succès. Et un portfolio
+Github a donc été préféré.
 
-Donc ne pas oublier lors du déploiement de remplacer keystore/cert.p12 par un certificat valide. Pour les
-propriétés à utiliser pour le certificat voir le fichier suivant
+Vous pouvez néanmoins activer le mode HTPPS en mettant le paramètre server.ssl.enabled à true au lieu de false.
+De plus, actuellement le certificat SSL utilisé avec le protocole HTTPS, et stocké à keystore/cert.p12 est un
+certificat auto-signé. Ce qui est utilisé en développement. Mais cela a le soucis de faire afficher des messages
+d'erreurs en navigateur client, et de forcer l'utilisateur à accepter le risque de sécurité.
+
+Donc si vous souhaitez effectuer un déploiement en HTTPS, et non en HTTP, ne pas oublier de remplacer 
+keystore/cert.p12 par un certificat valide.
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)      
 
@@ -67,40 +78,30 @@ Pour créer une session administrateur:
 # Déploiement
 
 
-## Etape 1: Initialiser la base de donnée   
+## Etape 1: Création de la base de donnée   
 
-Créez la structure de la base de donnée avec le script suivant. Celui ci créera les tables, et index
-nécessaires.
+Créez une base de donnée PostgreSQL, via le projet commun_database qui est également disponible sur mon Github.
+Faites attention que la base de donnée devra être déployée en port 5432, avec l'utilisateur tora, et le mot de
+passe password. Mot de passe que vous pourre changer après.
 
-[script/init.sql](./script/init.sql)
-
-
-## Etape 2: Modifier le certificat SSL  
-
-Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé. Ce qui est utilisé
-en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
-forcer l'utilisateur à accepter le risque de sécurité.
-
-Donc avant de déployer, il va falloir remplacer keystore/cert.p12 par un certificat valide. Pour les 
-propriétés à utiliser pour le certificat voir le fichier suivant
-     
-[src/main/resources/application.yml](./src/main/resources/application.yml)  
+Ensuite lancez cette API en mode développement, qui est un mode autorisant la création et modification des tables
+en base de donnée. Vous aurez alors une base de donnée, avec toutes les tables nécessaires, et il vous faudra
+juste utiliser un peu le site internet, afin de remplir la base de donnée. 
 
 
-## Etape 3: Création de l'image docker   
+## Etape 2: Création de l'image docker   
 
-Une fois le certificat SSL mis à jour, vous pouvez ensuite construire l'image docker avec la commande suivante.
-Faites attention à modifier le numéro de version, selon la version de l'application.    
-
+Une fois la base de donnée prête, vous pouvez ensuite construire l'image docker avec la commande suivante.
 
 ```sh
-docker build -t app_1_1  .
+docker build -t app  .
 ```
 
-## Etape 4: Execution de l'image docker   
+## Etape 3: Execution de l'image docker   
 
 Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Faites attention à changer
-le mots de passe pour DATABASE_PASSWORD. Et à ne pas laisser celui-ci à "password".
+le mots de passe pour DATABASE_PASSWORD. Et à ne pas laisser celui-ci à "password". Si nécessaire, le projet commun_database
+utilisé pour créer la base de donnée, mentionne comment changer le mot de passe de celle-ci.
  
 DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
@@ -108,8 +109,7 @@ DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.
 docker run -d --name capp_1_1  -p 8081:8081 -e DATABASE_PASSWORD=password  app_1_1
 ```
 
-Vérifiez alors que vous puissez vous connecter au swagger en production.
+Vérifiez alors que vous puissez vous connecter au swagger en production. Actuellement, le swagger de production est configuré
+pour démarrer en localhost. Vous pouvez donc vérifier le swagger via cet page internet.
 
-Pour un déploiement vers erdline.com comme actuellement, l'url du swagger est donc
-
-https://erdline.com:8081/swagger-ui/index.html    
+http://localhost:8081/swagger-ui/index.html 
