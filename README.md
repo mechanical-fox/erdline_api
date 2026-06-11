@@ -84,11 +84,11 @@ Pour créer une session administrateur:
 
 ## Etape 1: Création de la base de donnée   
 
-Créez une base de donnée PostgreSQL, via le projet commun_database qui est également disponible sur mon Github.
-Faites attention que la base de donnée devra être déployée en port 5432, avec l'utilisateur tora, et le mot de
-passe password. Mot de passe que vous pourre changer après.
+Créez une base de donnée PostgreSQL vierge, via le projet commun_database qui est également disponible sur mon 
+Github. Faites attention que la base de donnée devra être déployée en port 5432, avec l'utilisateur tora, et le mot 
+de passe password. Mot de passe que vous pourre changer après.
 
-Ensuite lancez cette API en mode développement, qui est un mode autorisant la création et modification des tables
+Ensuite lancez cette API en mode développement, qui est un mode autorisant la création et la modification des tables
 en base de donnée. Vous aurez alors une base de donnée, avec toutes les tables nécessaires, et il vous faudra
 juste utiliser un peu le site internet, afin de remplir la base de donnée. 
 
@@ -114,6 +114,6 @@ docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger en production. Actuellement, le swagger de production est configuré
-pour démarrer en localhost. Vous pouvez donc vérifier le swagger via cet page internet.
+pour démarrer en localhost. Vous pouvez donc vous connecter au swagger via la page internet suivante.
 
 http://localhost:8081/swagger-ui/index.html 
