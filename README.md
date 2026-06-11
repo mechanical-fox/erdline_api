@@ -32,6 +32,9 @@ suivant
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)      
 
+Pour activer le mode HTTPS en modifiant server.ssl.enabled, voir le fichier suivant
+
+[src/main/resources/application-prod.yml](./src/main/resources/application-prod.yml)
 
 # Execution   
 
