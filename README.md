@@ -27,7 +27,8 @@ certificat auto-signé. Ce qui est utilisé en développement. Mais cela a le so
 d'erreurs en navigateur client, et de forcer l'utilisateur à accepter le risque de sécurité.
 
 Donc si vous souhaitez effectuer un déploiement en HTTPS, et non en HTTP, ne pas oublier de remplacer 
-keystore/cert.p12 par un certificat valide.
+keystore/cert.p12 par un certificat valide. Pour les propriétés à utiliser pour le certificat voir le fichier
+suivant
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)      
 
