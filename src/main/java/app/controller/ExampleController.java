@@ -3,6 +3,7 @@ package app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,7 +75,7 @@ public class ExampleController {
     @ApiResponse(responseCode = "401", description = "Erreur d'authentification", content = @Content)
     @ApiResponse(responseCode = "404", description = "Session Inexistante", content = @Content)
     @PutMapping(value="/example/push_from_session/{id}", produces = "text/plain")
-    public ResponseEntity<String> putExampleFromSession(@RequestHeader HttpHeaders headers, @RequestParam Long id) 
+    public ResponseEntity<String> putExampleFromSession(@RequestHeader HttpHeaders headers, @RequestParam @NonNull Long id) 
     throws UnauthorizedException, NotFoundException{
 
         Optional<SessionEntity> session = sessionRepository.findById(id);

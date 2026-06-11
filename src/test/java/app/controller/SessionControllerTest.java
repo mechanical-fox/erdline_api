@@ -210,7 +210,7 @@ public class SessionControllerTest {
         Integer id = json.get("sessionId").asInt();
         String token = json.get("token").asText();
 
-         mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                     .get("/session/" + id)
                     .header("Authorization", "Bearer " + token))
                         .andExpect(status().is(200))
