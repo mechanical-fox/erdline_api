@@ -106,7 +106,7 @@ utilisé pour créer la base de donnée, mentionne comment changer le mot de pas
 DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
 ```sh
-docker run -d --name capp_1_1  -p 8081:8081 -e DATABASE_PASSWORD=password  app_1_1
+docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app
 ```
 
 Vérifiez alors que vous puissez vous connecter au swagger en production. Actuellement, le swagger de production est configuré
