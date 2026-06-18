@@ -17,7 +17,7 @@ Les fonctionnalités actuelles sont les suivantes:
 
 # Utilisation du mode HTTPS
 
-Cette API fonctionne actuellement en HTTP, et non en HTTPS y compris en production. Cela est une modification
+Cette API fonctionne actuellement en HTTP, et non en HTTPS, y compris en production. Cela est une modification
 effectuée, car après test un portfolio sous forme de site internet rencontre assez peu de succès. Et un portfolio
 Github a donc été préféré.
 
