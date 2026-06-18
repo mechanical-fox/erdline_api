@@ -1,0 +1,7 @@
+{
+  "session": "Unicorn",
+  "password": "Sparkles4",
+  "json_backgrounds": "[{\"counter\":1,\"id\":\"background-1\",\"name\":\"Jardin\",\"color_id\":1}]",
+  "json_characters": "[{\"counter\":1,\"id\":\"character-1\",\"name\":\"Nathaniel\",\"expressions\": [{\"id\":\"expr-1\",\"counter\":1,\"name\":\"Gratitude\",\"sprite_id\":\"1\"}]}",
+  "json_scenes": "[{\"createdAt\":1779644345571,\"counter\":1,\"id\":\"scene-1\",\"name\":\"Meeting\",\"backgroundId\":\"background-1\",\"messages\":[]}]"
+}

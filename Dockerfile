@@ -3,7 +3,7 @@ FROM maven:4.0.0-rc-4-eclipse-temurin-25-noble
 
 ADD  .  /app/
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 8081
 
 RUN mvn package -DskipTests
 

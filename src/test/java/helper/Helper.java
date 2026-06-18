@@ -1,46 +1,41 @@
+package helper;
 
-package app.util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
 
 
+public class Helper {
 
-public class Util{
 
-    /** Generate a random and unique token.*/
-    public static String generateToken(){
-        UUID uuid = UUID.randomUUID();
-        String result = uuid.toString().replaceAll("-","");
-        result = result.substring(0,16);
-        return result;
-    }
+    /** This function read the content of a file, and return it. This function read all the file without limit
+     * of size, and so will have problem to proceed large files (500Mo or more).*/
+    public static String readAll(String filename) throws IOException{
 
-    /* Returns true if s contains at least one digit.*/
-    public static boolean includeDigit(String s){
+        try(FileInputStream file_in = new FileInputStream(filename)){
+            int length = file_in.available();
+            byte[] buffer = new byte[length];
+            int readed = file_in.read(buffer);
 
-        for(int i = 0; i < s.length(); i++){
-            char c = s.charAt(i);
+            if(readed != length)
+                throw new IOException("Error I/O during reading the file " + filename);
 
-            if(c >= '0' && c <= '9')
-                return true;
+            return new String(buffer);
         }
-
-        return false;
+        
     }
 
     /** Returns a cryptographic hash, of the string given. The algorithm used is SHA-256. */
     public static String hash(String s) throws NoSuchAlgorithmException{
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(s.getBytes(StandardCharsets.UTF_8));
-        String result = Util.bytesToHex(hash);
+        String result = Helper.bytesToHex(hash);
         return result;
     }
 
-
-    
     /** Convert an array of bytes, to a hexadecimal string */
     private static String bytesToHex(byte[] hash) {
 
@@ -58,5 +53,4 @@ public class Util{
         return hexString.toString();
     }
 
-    
 }

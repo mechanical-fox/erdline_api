@@ -2,45 +2,44 @@
 
 # Projet
 
-API qui assure les fonctions suivantes:     
-- Création de documentation API    
-- Génération de la documentation API en format Html    
-- Enregistrement des exemples de documentation déjà généré   
+Ce projet contient le code de la partie backend / serveur, du site Erdline. Ce site a pour but de permettre
+la création de jeux de type Visual Novel. Afin d'aider à pouvoir plus facilement tester une idée de Visual
+Novel, des sprites de base sont fournis, et il est utilisé comme décors de simples dégradés de couleurs.
 
-Cette API est liée au site internet Erdline, qui a pour but de permettre de créer une documentation API de
-façon graphique. Et non en utilisant un langage OpenAI qu'il est nécessaire d'apprendre, afin de pouvoir
-générer une documentation.
+Les fonctionnalités actuelles sont les suivantes:
+- Sauvegarde via le système de session
+- Possibilité de créer des Visual Novels de type Kinetic
+- Décors gérés sous formes de dégradés de couleurs
+- Gestion des Sprites des personnages 
+- Page Exemple
+- Page A propos
 
-Après il s'agit plus d'un site démo / vitrine à l'heure actuelle. Afin de pouvoir passer mon CV, et montrer
-un peu un site que j'ai fait. Donc actuellement l'état en v1.0 est encore assez peu avancé. En particulier
-la sauvegarde de documentation en cours de rédaction n'est pas encore disponible.
 
+# Utilisation du mode HTTPS
 
-# Changement de Certificat SSL
+Cette API fonctionne actuellement en HTTP, et non en HTTPS, y compris en production. Cela est une modification
+effectuée, car après test un portfolio sous forme de site internet rencontre assez peu de succès. Et un portfolio
+Github a donc été préféré.
 
-Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé. Ce qui est utilisé
-en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
-forcer l'utilisateur à accepter le risque de sécurité.
+Vous pouvez néanmoins activer le mode HTPPS en mettant le paramètre **server.ssl.enabled** à true au lieu de false.
+De plus, actuellement le certificat SSL utilisé avec le protocole HTTPS, et stocké à **keystore/cert.p12** est un
+certificat auto-signé. Ce qui est utilisé en développement. Mais cela a le soucis de faire afficher des messages
+d'erreurs en navigateur client, et de forcer l'utilisateur à accepter le risque de sécurité.
 
-Donc ne pas oublier lors du déploiement de remplacer keystore/cert.p12 par un certificat valide. Pour les
-propriétés à utiliser pour le certificat voir le fichier suivant
+Donc si vous souhaitez effectuer un déploiement en HTTPS, et non en HTTP, ne pas oublier de remplacer 
+**keystore/cert.p12** par un certificat valide. Pour les propriétés à utiliser pour le certificat voir le fichier
+suivant
      
 [src/main/resources/application.yml](./src/main/resources/application.yml)      
 
+Pour activer le mode HTTPS en modifiant **server.ssl.enabled**, voir le fichier suivant
+
+[src/main/resources/application-prod.yml](./src/main/resources/application-prod.yml)
 
 # Execution   
 
-Avant de lancer l'application, veuillez définir le mot de passe à utiliser pour l'API pour protéger les
-fonctionnalités admin. Sinon au démarrage le programme affichera une erreur, en l'absence de la déclaration
-de variable d'environment adéquate.
 
-Version windows(powershell):
-
-```sh
-$Env:ERDLINE_PASSWORD="password"
-```
-
-Vous pouvez ensuite lancer l'API en http en utilisant une base de donnée localhost avec le profil defaut. 
+Vous pouvez executer l'API en http en utilisant une base de donnée localhost avec le profil default.
 Une base de donnée devra tourner sur votre ordinateur en port 5432, ou bien le programme s'arretera avec une
 erreur de connexion.
 
@@ -48,10 +47,9 @@ erreur de connexion.
 mvn spring-boot:run
 ```
 
-
 Vous pouvez ensuite vérifier que l'API fonctionne en vous connectant au swagger.
 
-http://localhost:8080/swagger-ui/index.html  
+http://localhost:8081/swagger-ui/index.html  
 
 
 # Tests unitaires    
@@ -68,55 +66,56 @@ Après les tests, un rapport html avec la couverture de test sera alors crée à
 **target/site/jacoco/index.html**    
 
 
+# Configuration Administrateur
+
+Il existe des sessions Admin, et des sessions non Admin. L'API ne permet cependant pas de créer de session Admin. Ni 
+de modifier une session déjà existante. Pour des raisons de sécurité, il a été choisit de ne permettre la création 
+d'un administrateur, que depuis la base de donnée.
+
+
+Pour créer une session administrateur:
+- Créer une session avec l'API, ou l'interface graphique
+- Se connecter à la base de donnée
+- En table REGISTERED_SESSION, mettre le paramètre "is_admin" de la session créée à "true"
+
 
 # Déploiement
 
 
-## Etape 1: Initialiser la base de donnée   
+## Etape 1: Création de la base de donnée   
 
-Créez la structure de la base de donnée avec le script suivant. Celui ci créera les tables, et index
-nécessaires.
-
-[script/init.sql](./script/init.sql)
-
-
-## Etape 2: Modifier le certificat SSL  
-
-Actuellement le certificat SSL utilisé à keystore/cert.p12 est un certificat auto-signé. Ce qui est utilisé
-en développement. Mais cela a le soucis de faire afficher des messages d'erreurs en navigateur client, et de
-forcer l'utilisateur à accepter le risque de sécurité.
-
-Donc avant de déployer, il va falloir remplacer keystore/cert.p12 par un certificat valide. Pour les 
-propriétés à utiliser pour le certificat voir le fichier suivant
-     
-[src/main/resources/application.yml](./src/main/resources/application.yml)  
+Déployez la base de donnée Erdline, via le projet commun_database qui est également disponible sur mon Github. Faites
+attention que la base de donnée devra être déployée en port 5432, avec l'utilisateur tora, et le mot de passe password.
+Mot de passe que vous pourre changer après.
 
 
-## Etape 3: Création de l'image docker   
+## Etape 2: Création de l'image docker   
 
-Une fois le certificat SSL mis à jour, vous pouvez ensuite construire l'image docker avec la commande suivante.
-Faites attention à modifier le numéro de version, selon la version de l'application.    
-
+Une fois la base de donnée prête, vous pouvez ensuite construire l'image docker avec la commande suivante.
 
 ```sh
-docker build -t app_1_0  .
+docker build -t app  .
 ```
 
-## Etape 4: Execution de l'image docker   
+## Etape 3: Execution de l'image docker   
 
 Une fois l'image docker crée, vous pouvez maintenant la démarrer avec la commande suivante. Faites attention à changer
-les mots de passe pour ERDLINE_PASSWORD, et DATABASE_PASSWORD. Et à ne pas laisser ceux-ci à "password".
-
-
-ERDLINE_PASSWORD : mot de passe demandé par l'API en header Authorization pour certaines opérations.    
+le mot de passe pour DATABASE_PASSWORD. Et à ne pas laisser celui-ci à "password". Si nécessaire, le projet commun_database
+utilisé pour créer la base de donnée, mentionne comment changer le mot de passe de celle-ci.
+ 
 DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.   
 
 ```sh
-docker run -d --name capp_1_0  -p 8080:8080 -e ERDLINE_PASSWORD=password -e DATABASE_PASSWORD=password  app_1_0
+docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app
 ```
 
-Vérifiez alors que vous puissez vous connecter au swagger en production.
+Pour Linux la commande pour docker sera la suivante.
 
-Pour un déploiement vers erdline.com comme actuellement, l'url du swagger est donc
+```sh
+docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app --add-host host.docker.internal:host-gateway
+```
 
-https://erdline.com:8080/swagger-ui/index.html    
+Vérifiez alors que vous puissez vous connecter au swagger en production. Actuellement, le swagger de production est configuré
+pour démarrer en localhost. Vous pouvez donc vous connecter au swagger via la page internet suivante.
+
+http://localhost:8081/swagger-ui/index.html 
