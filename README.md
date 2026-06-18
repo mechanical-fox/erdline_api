@@ -109,6 +109,12 @@ DATABASE_PASSWORD : mot de passe utilisé par la base de donnée.
 docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app
 ```
 
+Pour Linux la commande pour docker sera la suivante.
+
+```sh
+docker run -d --name capp  -p 8081:8081 -e DATABASE_PASSWORD=password app --add-host host.docker.internal:host-gateway
+```
+
 Vérifiez alors que vous puissez vous connecter au swagger en production. Actuellement, le swagger de production est configuré
 pour démarrer en localhost. Vous pouvez donc vous connecter au swagger via la page internet suivante.
 

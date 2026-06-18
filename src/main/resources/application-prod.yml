@@ -10,6 +10,6 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         generate-ddl: false # Set false for production
     datasource:
-        url: jdbc:postgresql://localhost:5432/default
+        url: jdbc:postgresql://host.docker.internal:5432/default
         username: tora
         password: password
